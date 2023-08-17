@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCaptcha.API", "FastCaptcha.API\FastCaptcha.API.csproj", "{5A33044C-12F1-4FAF-ACF3-06B8E810BED3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCaptcha.Models", "FastCaptcha.Models\FastCaptcha.Models.csproj", "{96C09A92-62D4-4DB2-A413-1343A6DB8466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCaptcha.Hashing", "FastCaptcha.Hashing\FastCaptcha.Hashing.csproj", "{7345C413-8782-4A7D-A748-37B351C9F02E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A33044C-12F1-4FAF-ACF3-06B8E810BED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A33044C-12F1-4FAF-ACF3-06B8E810BED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A33044C-12F1-4FAF-ACF3-06B8E810BED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A33044C-12F1-4FAF-ACF3-06B8E810BED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96C09A92-62D4-4DB2-A413-1343A6DB8466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96C09A92-62D4-4DB2-A413-1343A6DB8466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96C09A92-62D4-4DB2-A413-1343A6DB8466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96C09A92-62D4-4DB2-A413-1343A6DB8466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7345C413-8782-4A7D-A748-37B351C9F02E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7345C413-8782-4A7D-A748-37B351C9F02E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7345C413-8782-4A7D-A748-37B351C9F02E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7345C413-8782-4A7D-A748-37B351C9F02E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
