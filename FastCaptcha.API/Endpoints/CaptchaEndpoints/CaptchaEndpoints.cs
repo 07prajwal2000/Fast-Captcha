@@ -12,6 +12,6 @@ public static class CaptchaEndpoints
 
     public static void AddCaptchaEndpointsDIServices(this IServiceCollection services)
     {
-        services.AddCaptchaV1DIServices();
+        services.AddCaptchaV1DiServices();
     }
 }

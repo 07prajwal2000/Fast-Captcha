@@ -1,14 +1,24 @@
-﻿using FastCaptcha.Models;
+﻿using FastCaptcha.Hashing;
+using FastCaptcha.ImageProcessing;
+using FastCaptcha.Models;
 using FastCaptcha.Models.Captcha;
 
 namespace FastCaptcha.API.Services;
 
 public class CaptchaServices : ICaptchaServices
 {
+    private readonly ShaHashService _hashService;
+    private readonly ImageProcessor _imageProcessor;
 
-    public string GenerateRandomText()
+    public CaptchaServices(ShaHashService hashService, ImageProcessor imageProcessor)
     {
-        var charLength = 10;
+        this._hashService = hashService;
+        _imageProcessor = imageProcessor;
+    }
+
+    private string GenerateRandomText()
+    {
+        var charLength = 8;
         var rand = Random.Shared;
         Span<char> spanOfChars = stackalloc char[charLength];
         for (int i = 0; i < charLength; i++)
@@ -38,23 +48,43 @@ public class CaptchaServices : ICaptchaServices
         return captchaText;
     }
 
-    public string GenerateHash(string plainText)
+    private string GenerateHash(string plainText)
     {
-        
-        return "";
+        var hash = _hashService.HashData(plainText);
+        return hash;
     }
     
     public async Task<Response<GenerateCaptchaResponse>> GenerateCaptcha(string apiKey = null)
     {
-        var captcha = new GenerateCaptchaResponse("", "", DateTime.Now);
-        var response = new Response<GenerateCaptchaResponse>(captcha, "", true);
-
+        var captchaText = GenerateRandomText();
+        var hash = GenerateHash(captchaText);
+        var imageAsBase64 = await Task.Run(() => _imageProcessor.GenerateImageFromText(captchaText));
+        
+        var captcha = new GenerateCaptchaResponse(hash, imageAsBase64, DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds());
+        var response = new Response<GenerateCaptchaResponse>(captcha, "Success", true);
+        
         return response;
+    }
+
+    public Response<VerifyCaptchaResponse> VerifyCaptcha(VerifyCaptchaDto dto)
+    {
+        try
+        {
+            var valid = _hashService.Validate(dto.UserInput, dto.Hash);
+            var response = new Response<VerifyCaptchaResponse>(
+                new VerifyCaptchaResponse(valid ? "The input matches with the captcha." : "The input might be incorrect or the captcha has already expired.", true), valid ? "Success" : "Failed", valid);
+            return response;
+        }
+        catch (Exception)
+        {
+            return new Response<VerifyCaptchaResponse>(new VerifyCaptchaResponse("Invalid captcha", false), "Failed",
+                false);
+        }
     }
 }
 
 public interface ICaptchaServices
 {
     Task<Response<GenerateCaptchaResponse>> GenerateCaptcha(string apiKey = null);
-    string GenerateRandomText();
+    Response<VerifyCaptchaResponse> VerifyCaptcha(VerifyCaptchaDto dto);
 }

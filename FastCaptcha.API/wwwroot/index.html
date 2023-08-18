@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Captcha Tests</title>
+</head>
+<body>
+    <p id="hash" data-hash="">Hash: </p>
+    <button onclick="GetCaptcha()">Generate Captcha</button>
+    
+    <div class="captcha-container">
+        <img width="150" height="50" id="captcha-img" src="" alt="">
+        <input id="user-input" type="text" maxlength="8">
+        <button onclick="VerifyCaptcha()">Verify captcha</button>
+        <p id="msg-body" style="color: forestgreen"></p>
+    </div>
+</body>
+</html>
+<style>
+    .captcha-container {
+        margin: 50px 0;
+        gap: 10px;
+        display: flex;
+        width: 200px;
+        flex-direction: column;
+    }
+</style>
+<script>
+    const hashTag = document.getElementById("hash");
+    const captchaImg = document.getElementById("captcha-img");
+    const userInputTag = document.getElementById("user-input");
+    const msgBodyTag = document.getElementById("msg-body");
+    
+    async function VerifyCaptcha() {
+        const verifyUrl = "/api/v1/verify-captcha";
+        const hash = hashTag.getAttribute("data-hash");
+        const userInput = userInputTag.value;
+        
+        if (!userInput) {
+            alert("Enter a valid captcha");
+            return;
+        }
+        if (!hash) {
+            alert("The Hash is not found");
+            return;
+        }
+        
+        const body = JSON.stringify({
+            hash, userInput
+        });
+        const res = await fetch(verifyUrl, {
+            body,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        const jsonData = await res.json();
+        if (!jsonData.success || !jsonData.data.valid) {
+            alert(jsonData.data?.message || jsonData.message);
+            return;
+        }
+        
+        msgBodyTag.innerHTML = jsonData.data.message;
+    }
+    
+    async function GetCaptcha() {
+        msgBodyTag.innerHTML = "";
+        const generateCaptchaUrl = "/api/v1/generate-captcha"
+        
+        const res = await fetch(generateCaptchaUrl);
+        const jsonData = await res.json();
+        if (!jsonData.success) {
+            alert(jsonData.data?.message || jsonData.message);
+            return;
+        }
+        hashTag.innerHTML = "Hash: " + jsonData.data.hash;
+        hashTag.setAttribute("data-hash", jsonData.data.hash);
+        captchaImg.src = jsonData.data.imageAsBase64;
+    }
+</script>
