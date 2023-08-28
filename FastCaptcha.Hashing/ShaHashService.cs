@@ -13,7 +13,7 @@ public class ShaHashService
 
         var unixExpiry = expiry?.ToUnixTimeSeconds() ?? DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds();
         BitConverter.TryWriteBytes(unixExpirySpan[..8], unixExpiry); // writing unix_timestamp to hash
-
+        
         Span<byte> rawTextAsSpan = stackalloc byte[rawText.Length];
         Encoding.UTF8.GetBytes(rawText, rawTextAsSpan); // writing raw_text to the hash as bytes
 

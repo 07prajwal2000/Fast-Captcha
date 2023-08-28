@@ -72,7 +72,7 @@ public class CaptchaServices : ICaptchaServices
         {
             var valid = _hashService.Validate(dto.UserInput, dto.Hash);
             var response = new Response<VerifyCaptchaResponse>(
-                new VerifyCaptchaResponse(valid ? "The input matches with the captcha." : "The input might be incorrect or the captcha has already expired.", true), valid ? "Success" : "Failed", valid);
+                new VerifyCaptchaResponse(valid ? "The input matches with the captcha." : "The input might be incorrect or the captcha has already expired.", valid), valid ? "Success" : "Failed", valid);
             return response;
         }
         catch (Exception)
